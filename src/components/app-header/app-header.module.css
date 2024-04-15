@@ -9,6 +9,7 @@
 }
 .links {
     display: flex;
+    margin-left: -20px;
 }
 .item {
     cursor: pointer;
