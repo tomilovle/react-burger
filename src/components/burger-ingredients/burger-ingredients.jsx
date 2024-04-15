@@ -4,12 +4,13 @@ import data from '../../utils/data.json';
 import IngredientCard from './burger-ingredients-card';
 import styles from './burger-ingredients.module.css';
 import { CustomScroll } from 'react-custom-scroll';
+import PropTypes from 'prop-types';
 
 const BurgerIngredients = () => {
     const [current, setCurrent] = React.useState('bun');
     return (
         <div>
-            <div style={{ display: 'flex', marginTop: 28 }}>
+            <div style={{ display: 'flex', marginTop: 20 }}>
                 <Tab
                     value="bun"
                     active={current === 'bun'}
@@ -32,7 +33,7 @@ const BurgerIngredients = () => {
                     Начинки
                 </Tab>
             </div>
-            <CustomScroll heightRelativeToParent="70vh">
+            <CustomScroll heightRelativeToParent="60vh">
                 <div className={styles.burgerIngredients}>
                     <p className="text text_type_main-medium">Булки</p>
                     <div className={styles.container}>
@@ -95,3 +96,9 @@ const BurgerIngredients = () => {
     );
 };
 export default BurgerIngredients;
+
+IngredientCard.propTypes = {
+    name: PropTypes.string,
+    image: PropTypes.string,
+    price: PropTypes.number,
+};

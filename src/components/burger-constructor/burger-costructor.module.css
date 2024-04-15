@@ -1,3 +1,16 @@
-.burgerConstructor {
-    margin-top: 20px;
+.totalCoast {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-top: 40px;
+}
+.coast {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+}
+
+.coast svg {
+    width: 36px;
+    height: 36px;
 }
