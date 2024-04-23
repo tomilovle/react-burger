@@ -48,6 +48,7 @@ const BurgerConstructor = () => {
                                         text={item.name}
                                         price={item.price}
                                         thumbnail={item.image}
+                                        key={item._id}
                                     />
                                 </div>
                             );

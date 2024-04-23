@@ -40,7 +40,10 @@ const BurgerIngredients = () => {
                         {data.map((ingredient) => {
                             if (ingredient.type === 'bun') {
                                 return (
-                                    <IngredientCard ingredient={ingredient} />
+                                    <IngredientCard
+                                        ingredient={ingredient}
+                                        key={ingredient._id}
+                                    />
                                 );
                             } else {
                                 return null;
@@ -54,7 +57,10 @@ const BurgerIngredients = () => {
                         {data.map((ingredient) => {
                             if (ingredient.type === 'sauce') {
                                 return (
-                                    <IngredientCard ingredient={ingredient} />
+                                    <IngredientCard
+                                        ingredient={ingredient}
+                                        key={ingredient._id}
+                                    />
                                 );
                             } else {
                                 return null;
@@ -68,7 +74,10 @@ const BurgerIngredients = () => {
                         {data.map((ingredient) => {
                             if (ingredient.type === 'main') {
                                 return (
-                                    <IngredientCard ingredient={ingredient} />
+                                    <IngredientCard
+                                        ingredient={ingredient}
+                                        key={ingredient._id}
+                                    />
                                 );
                             } else {
                                 return null;

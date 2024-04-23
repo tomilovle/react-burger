@@ -9,10 +9,7 @@ function App() {
         <>
             <AppHeader />
             <main className={styles.container}>
-                <p
-                    className="text text_type_main-large mt-40"
-                    // className={`${styles.myModuleClass} my regular-class`}
-                >
+                <p className="text text_type_main-large mt-40">
                     Соберите бургер
                 </p>
                 <div className={styles.row}>
