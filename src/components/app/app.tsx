@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import styles from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
@@ -8,15 +8,18 @@ function App() {
     return (
         <>
             <AppHeader />
-            <main className="container">
-                <p className="text text_type_main-large mt-40">
+            <main className={styles.container}>
+                <p
+                    className="text text_type_main-large mt-40"
+                    // className={`${styles.myModuleClass} my regular-class`}
+                >
                     Соберите бургер
                 </p>
-                <div className="row">
-                    <div className="col-6">
+                <div className={styles.row}>
+                    <div className={styles['col-6']}>
                         <BurgerIngredients />
                     </div>
-                    <div className="col-6">
+                    <div className={styles['col-6']}>
                         <BurgerConstructor />
                     </div>
                 </div>

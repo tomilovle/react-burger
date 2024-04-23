@@ -1,4 +1,4 @@
-import stylesConstuctor from './burger-costructor.module.css';
+import styles from './burger-costructor.module.css';
 import {
     ConstructorElement,
     DragIcon,
@@ -10,7 +10,7 @@ import { CustomScroll } from 'react-custom-scroll';
 
 const BurgerConstructor = () => {
     return (
-        <>
+        <section>
             <div className="pl-8 pb-4 pt-8">
                 {data.map((item) => {
                     if (item === data[0]) {
@@ -18,10 +18,10 @@ const BurgerConstructor = () => {
                             <ConstructorElement
                                 type="top"
                                 isLocked={true}
-                                text={item.name}
+                                text={item.name + '(верх)'}
                                 price={item.price}
                                 thumbnail={item.image}
-                                key={item.id}
+                                key={item._id}
                             />
                         );
                     } else {
@@ -30,13 +30,7 @@ const BurgerConstructor = () => {
                 })}
             </div>
             <CustomScroll heightRelativeToParent="40vh">
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '16px',
-                    }}
-                >
+                <div className={styles['middle-container']}>
                     {data.map((item) => {
                         if (
                             item === data[0] ||
@@ -45,7 +39,7 @@ const BurgerConstructor = () => {
                             return null;
                         } else {
                             return (
-                                <div>
+                                <div key={item._id}>
                                     <span className="pr-2">
                                         <DragIcon type="primary" />
                                     </span>
@@ -54,7 +48,6 @@ const BurgerConstructor = () => {
                                         text={item.name}
                                         price={item.price}
                                         thumbnail={item.image}
-                                        key={item.id}
                                     />
                                 </div>
                             );
@@ -69,10 +62,10 @@ const BurgerConstructor = () => {
                             <ConstructorElement
                                 type="bottom"
                                 isLocked={true}
-                                text={item.name}
+                                text={item.name + '(низ)'}
                                 price={item.price}
                                 thumbnail={item.image}
-                                key={item.id}
+                                key={item._id}
                             />
                         );
                     } else {
@@ -80,8 +73,8 @@ const BurgerConstructor = () => {
                     }
                 })}
             </div>
-            <div className={stylesConstuctor.totalCoast}>
-                <span className={stylesConstuctor.coast}>
+            <div className={styles.totalCoast}>
+                <span className={styles.coast}>
                     <span className="text text_type_digits-medium pr-1">
                         610
                     </span>
@@ -91,7 +84,7 @@ const BurgerConstructor = () => {
                     Оформить заказ
                 </Button>
             </div>
-        </>
+        </section>
     );
 };
 export default BurgerConstructor;

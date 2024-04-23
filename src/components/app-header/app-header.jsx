@@ -8,20 +8,20 @@ import {
 
 const AppHeader = () => {
     return (
-        <nav className={styles.header}>
+        <header className={styles.header}>
             <div className={styles.links}>
-                <div className={styles.item}>
+                <nav className={styles.item}>
                     <BurgerIcon type="primary" />
                     <p className="text text_type_main-default pl-2">
                         Конструктор
                     </p>
-                </div>
-                <div className={styles.item}>
+                </nav>
+                <nav className={styles.item}>
                     <ListIcon type="secondary" />
                     <p className="text text_type_main-default text_color_inactive pl-2">
                         Лента заказов
                     </p>
-                </div>
+                </nav>
             </div>
             <a href="/" className={styles.logo}>
                 <Logo />
@@ -32,7 +32,7 @@ const AppHeader = () => {
                     Личный кабинет
                 </p>
             </div>
-        </nav>
+        </header>
     );
 };
 

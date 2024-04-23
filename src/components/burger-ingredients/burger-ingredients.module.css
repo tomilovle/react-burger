@@ -1,3 +1,7 @@
+.burger_tabs {
+    display: flex;
+    margin-top: 20px;
+}
 .burgerIngredients {
     margin-top: 40px;
     max-height: 720px;

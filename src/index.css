@@ -11,3 +11,10 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
 }
+
+body .rcs-inner-handle {
+    background-color: #8585ad;
+    height: 200%;
+    margin-top: 6px;
+    border-radius: 0;
+}

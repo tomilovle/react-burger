@@ -12,9 +12,3 @@
     width: 50%;
     padding: 0 20px;
 }
-body .rcs-inner-handle {
-    background-color: #8585ad;
-    height: 200%;
-    margin-top: 6px;
-    border-radius: 0;
-}

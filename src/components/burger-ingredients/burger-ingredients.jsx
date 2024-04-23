@@ -10,7 +10,7 @@ const BurgerIngredients = () => {
     const [current, setCurrent] = React.useState('bun');
     return (
         <div>
-            <div style={{ display: 'flex', marginTop: 20 }}>
+            <div className={styles.burger_tabs}>
                 <Tab
                     value="bun"
                     active={current === 'bun'}
@@ -37,15 +37,10 @@ const BurgerIngredients = () => {
                 <div className={styles.burgerIngredients}>
                     <p className="text text_type_main-medium">Булки</p>
                     <div className={styles.container}>
-                        {data.map((item) => {
-                            if (item.type === 'bun') {
+                        {data.map((ingredient) => {
+                            if (ingredient.type === 'bun') {
                                 return (
-                                    <IngredientCard
-                                        image={item.image_large}
-                                        price={item.price}
-                                        name={item.name}
-                                        key={item._id}
-                                    />
+                                    <IngredientCard ingredient={ingredient} />
                                 );
                             } else {
                                 return null;
@@ -53,18 +48,13 @@ const BurgerIngredients = () => {
                         })}
                     </div>
                 </div>
-                <div style={{ marginTop: 40 }}>
+                <div className={styles.burgerIngredients}>
                     <p className="text text_type_main-medium">Соусы</p>
                     <div className={styles.container}>
-                        {data.map((item) => {
-                            if (item.type === 'sauce') {
+                        {data.map((ingredient) => {
+                            if (ingredient.type === 'sauce') {
                                 return (
-                                    <IngredientCard
-                                        image={item.image_large}
-                                        price={item.price}
-                                        name={item.name}
-                                        key={item._id}
-                                    />
+                                    <IngredientCard ingredient={ingredient} />
                                 );
                             } else {
                                 return null;
@@ -75,15 +65,10 @@ const BurgerIngredients = () => {
                 <div style={{ marginTop: 40 }}>
                     <p className="text text_type_main-medium">Начинки</p>
                     <div className={styles.container}>
-                        {data.map((item) => {
-                            if (item.type === 'main') {
+                        {data.map((ingredient) => {
+                            if (ingredient.type === 'main') {
                                 return (
-                                    <IngredientCard
-                                        image={item.image_large}
-                                        price={item.price}
-                                        name={item.name}
-                                        key={item._id}
-                                    />
+                                    <IngredientCard ingredient={ingredient} />
                                 );
                             } else {
                                 return null;

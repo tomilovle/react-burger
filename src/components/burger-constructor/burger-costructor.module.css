@@ -1,3 +1,8 @@
+.middle-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 .totalCoast {
     display: flex;
     justify-content: end;
@@ -9,7 +14,6 @@
     align-items: center;
     margin-right: 40px;
 }
-
 .coast svg {
     width: 36px;
     height: 36px;
