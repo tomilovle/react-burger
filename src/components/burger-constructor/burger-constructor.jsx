@@ -1,14 +1,34 @@
+import { useState } from 'react';
 import styles from './burger-costructor.module.css';
+import OrderDetails from '../details/order-details';
 import {
     ConstructorElement,
     DragIcon,
     CurrencyIcon,
     Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import data from '../../utils/data.json';
 import { CustomScroll } from 'react-custom-scroll';
+import Modal from '../modal/modal';
 
-const BurgerConstructor = () => {
+const BurgerConstructor = (props) => {
+    const data = props.data;
+
+    const [visible, setVisible] = useState(false);
+
+    const handleOpenModal = () => {
+        setVisible(true);
+    };
+
+    const handleCloseModal = () => {
+        setVisible(false);
+    };
+
+    const modal = (
+        <Modal header="" onClose={handleCloseModal}>
+            <OrderDetails />
+        </Modal>
+    );
+
     return (
         <section>
             <div className="pl-8 pb-4 pt-8">
@@ -58,7 +78,7 @@ const BurgerConstructor = () => {
             </CustomScroll>
             <div className="pl-8 pt-4">
                 {data.map((item) => {
-                    if (item === data[data.length - 1]) {
+                    if (item === data[0]) {
                         return (
                             <ConstructorElement
                                 type="bottom"
@@ -81,9 +101,15 @@ const BurgerConstructor = () => {
                     </span>
                     <CurrencyIcon type="primary" />
                 </span>
-                <Button htmlType="button" type="primary" size="large">
+                <Button
+                    onClick={handleOpenModal}
+                    htmlType="button"
+                    type="primary"
+                    size="large"
+                >
                     Оформить заказ
                 </Button>
+                {visible && modal}
             </div>
         </section>
     );

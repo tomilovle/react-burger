@@ -1,15 +1,16 @@
 import React from 'react';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import data from '../../utils/data.json';
 import IngredientCard from './burger-ingredients-card';
 import styles from './burger-ingredients.module.css';
 import { CustomScroll } from 'react-custom-scroll';
 import PropTypes from 'prop-types';
 
-const BurgerIngredients = () => {
+const BurgerIngredients = (props) => {
+    const data = props.data;
+
     const [current, setCurrent] = React.useState('bun');
     return (
-        <div>
+        <>
             <div className={styles.burger_tabs}>
                 <Tab
                     value="bun"
@@ -68,7 +69,7 @@ const BurgerIngredients = () => {
                         })}
                     </div>
                 </div>
-                <div style={{ marginTop: 40 }}>
+                <div className={styles.burgerIngredients}>
                     <p className="text text_type_main-medium">Начинки</p>
                     <div className={styles.container}>
                         {data.map((ingredient) => {
@@ -86,7 +87,7 @@ const BurgerIngredients = () => {
                     </div>
                 </div>
             </CustomScroll>
-        </div>
+        </>
     );
 };
 export default BurgerIngredients;
