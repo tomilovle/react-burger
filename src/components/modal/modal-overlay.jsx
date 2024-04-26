@@ -1,20 +1,21 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import styles from './modal.module.css';
 
 const ModalOverlay = ({ onClose }) => {
-    const escFunction = useCallback((event) => {
-        if (event.key === 'Escape') {
-            onClose();
-        }
-    }, []);
-
     useEffect(() => {
+        const escFunction = (event) => {
+            if (event.key === 'Escape') {
+                onClose();
+            }
+        };
+
         document.addEventListener('keydown', escFunction, false);
 
         return () => {
             document.removeEventListener('keydown', escFunction, false);
         };
-    }, [escFunction]);
+    }, [onClose]);
+
     return <div className={styles.overlay} onClick={onClose} />;
 };
 

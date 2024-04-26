@@ -1,19 +1,23 @@
 import styles from './details.module.css';
 import PropTypes from 'prop-types';
-
-const IngredientDetails = (ingredient) => {
-    ingredient = ingredient.ingredient;
+import { ingredientType } from '../../utils/types';
+const IngredientDetails = (props) => {
     return (
         <div className={styles.modal}>
-            <img src={ingredient.image_large} alt={ingredient.name} />
-            <p className="text text_type_main-medium mt-4">{ingredient.name}</p>
+            <img
+                src={props.ingredient.image_large}
+                alt={props.ingredient.name}
+            />
+            <p className="text text_type_main-medium mt-4">
+                {props.ingredient.name}
+            </p>
             <div className={styles.desc}>
                 <div className={styles.item}>
                     <span className="text text_type_main-default pt-8">
                         Калории,ккал
                     </span>
                     <span className="text text_type_digits-default">
-                        {ingredient.calories}
+                        {props.ingredient.calories}
                     </span>
                 </div>
                 <div className={styles.item}>
@@ -21,7 +25,7 @@ const IngredientDetails = (ingredient) => {
                         Белки, г
                     </span>
                     <span className="text text_type_digits-default">
-                        {ingredient.proteins}
+                        {props.ingredient.proteins}
                     </span>
                 </div>
                 <div className={styles.item}>
@@ -29,7 +33,7 @@ const IngredientDetails = (ingredient) => {
                         Жиры, г
                     </span>
                     <span className="text text_type_digits-default">
-                        {ingredient.fat}
+                        {props.ingredient.fat}
                     </span>
                 </div>
                 <div className={styles.item}>
@@ -37,7 +41,7 @@ const IngredientDetails = (ingredient) => {
                         Углеводы, г
                     </span>
                     <span className="text text_type_digits-default">
-                        {ingredient.carbohydrates}
+                        {props.ingredient.carbohydrates}
                     </span>
                 </div>
             </div>
@@ -45,13 +49,6 @@ const IngredientDetails = (ingredient) => {
     );
 };
 
-IngredientDetails.propTypes = {
-    name: PropTypes.string,
-    image_large: PropTypes.string,
-    calories: PropTypes.number,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-};
+IngredientDetails.propTypes = ingredientType;
 
 export default IngredientDetails;

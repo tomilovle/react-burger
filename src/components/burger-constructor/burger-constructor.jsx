@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styles from './burger-costructor.module.css';
 import OrderDetails from '../details/order-details';
 import {
@@ -9,22 +8,13 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import { CustomScroll } from 'react-custom-scroll';
 import Modal from '../modal/modal';
+import { useModal } from '../../hooks/useModal';
 
 const BurgerConstructor = (props) => {
-    const data = props.data;
-
-    const [visible, setVisible] = useState(false);
-
-    const handleOpenModal = () => {
-        setVisible(true);
-    };
-
-    const handleCloseModal = () => {
-        setVisible(false);
-    };
+    const { isModalOpen, openModal, closeModal } = useModal();
 
     const modal = (
-        <Modal header="" onClose={handleCloseModal}>
+        <Modal header="" onClose={closeModal}>
             <OrderDetails />
         </Modal>
     );
@@ -32,8 +22,8 @@ const BurgerConstructor = (props) => {
     return (
         <section>
             <div className="pl-8 pb-4 pt-8">
-                {data.map((item) => {
-                    if (item === data[0]) {
+                {props.data.map((item) => {
+                    if (item === props.data[0]) {
                         return (
                             <ConstructorElement
                                 type="top"
@@ -51,10 +41,10 @@ const BurgerConstructor = (props) => {
             </div>
             <CustomScroll heightRelativeToParent="40vh">
                 <div className={styles['middle-container']}>
-                    {data.map((item) => {
+                    {props.data.map((item) => {
                         if (
-                            item === data[0] ||
-                            item === data[data.length - 1]
+                            item === props.data[0] ||
+                            item === props.data[props.data.length - 1]
                         ) {
                             return null;
                         } else {
@@ -77,8 +67,8 @@ const BurgerConstructor = (props) => {
                 </div>
             </CustomScroll>
             <div className="pl-8 pt-4">
-                {data.map((item) => {
-                    if (item === data[0]) {
+                {props.data.map((item) => {
+                    if (item === props.data[0]) {
                         return (
                             <ConstructorElement
                                 type="bottom"
@@ -102,14 +92,14 @@ const BurgerConstructor = (props) => {
                     <CurrencyIcon type="primary" />
                 </span>
                 <Button
-                    onClick={handleOpenModal}
+                    onClick={openModal}
                     htmlType="button"
                     type="primary"
                     size="large"
                 >
                     Оформить заказ
                 </Button>
-                {visible && modal}
+                {isModalOpen && modal}
             </div>
         </section>
     );

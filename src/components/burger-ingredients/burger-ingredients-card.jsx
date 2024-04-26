@@ -1,54 +1,42 @@
 import styles from './burger-ingredients.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
 import Modal from '../modal/modal';
 import IngredientDetails from '../details/ingredient-details';
+import { useModal } from '../../hooks/useModal';
+import { ingredientType } from '../../utils/types';
 
-const IngredientCard = (ingredient) => {
-    ingredient = ingredient.ingredient;
-
-    const [visible, setVisible] = useState(false);
-
-    const handleOpenModal = () => {
-        setVisible(true);
-    };
-
-    const handleCloseModal = () => {
-        setVisible(false);
-    };
+const IngredientCard = (props) => {
+    const { isModalOpen, openModal, closeModal } = useModal();
 
     const modal = (
-        <Modal header="Детали ингредиента" onClose={handleCloseModal}>
-            <IngredientDetails ingredient={ingredient} />
+        <Modal header="Ингредиенты" onClose={closeModal}>
+            <IngredientDetails ingredient={props.ingredient} />
         </Modal>
     );
 
     return (
         <>
-            <div className={styles.card} onClick={handleOpenModal}>
+            <div className={styles.card} onClick={openModal}>
                 <img
                     className={styles.image}
-                    src={ingredient.image}
-                    alt={ingredient.name}
+                    src={props.ingredient.image}
+                    alt={props.ingredient.name}
                 />
                 <div className={styles.price}>
                     <p className="text text_type_digits-default pr-2">
-                        {ingredient.price}
+                        {props.ingredient.price}
                     </p>
                     <CurrencyIcon type="primary" />
                 </div>
-                <p className="text text_type_main-default">{ingredient.name}</p>
+                <p className="text text_type_main-default">
+                    {props.ingredient.name}
+                </p>
             </div>
-            {visible && modal}
+            {isModalOpen && modal}
         </>
     );
 };
 
-IngredientCard.propTypes = {
-    name: PropTypes.string,
-    image: PropTypes.string,
-    price: PropTypes.number,
-};
+IngredientCard.propTypes = ingredientType;
 
 export default IngredientCard;
