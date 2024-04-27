@@ -13,7 +13,6 @@ const IngredientCard = (props) => {
             <IngredientDetails ingredient={props.ingredient} />
         </Modal>
     );
-
     return (
         <>
             <div className={styles.card} onClick={openModal}>
@@ -37,6 +36,8 @@ const IngredientCard = (props) => {
     );
 };
 
-IngredientCard.propTypes = ingredientType;
+IngredientCard.propTypes = {
+    ingredient: ingredientType,
+};
 
 export default IngredientCard;

@@ -9,6 +9,8 @@ import {
 import { CustomScroll } from 'react-custom-scroll';
 import Modal from '../modal/modal';
 import { useModal } from '../../hooks/useModal';
+import PropTypes from 'prop-types';
+import { ingredientType } from '../../utils/types';
 
 const BurgerConstructor = (props) => {
     const { isModalOpen, openModal, closeModal } = useModal();
@@ -104,4 +106,9 @@ const BurgerConstructor = (props) => {
         </section>
     );
 };
+
+BurgerConstructor.propTypes = {
+    data: PropTypes.arrayOf(ingredientType),
+};
+
 export default BurgerConstructor;
