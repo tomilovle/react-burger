@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.2.25",
     "@ya.praktikum/react-developer-burger-ui-components": "^1.14.0",
     "react": "^18.2.0",
+    "react-custom-scroll": "^7.0.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
