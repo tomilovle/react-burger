@@ -5,7 +5,8 @@ import styles from './burger-ingredients.module.css';
 import { CustomScroll } from 'react-custom-scroll';
 import PropTypes from 'prop-types';
 import { ingredientType } from '../../utils/types';
-const BurgerIngredients = (props) => {
+const BurgerIngredients = ({ ingredients }) => {
+
     const [current, setCurrent] = React.useState('bun');
     return (
         <>
@@ -36,7 +37,7 @@ const BurgerIngredients = (props) => {
                 <div className={styles.burgerIngredients}>
                     <p className="text text_type_main-medium">Булки</p>
                     <div className={styles.container}>
-                        {props.data.map((ingredient) => {
+                        {ingredients.map((ingredient) => {
                             if (ingredient.type === 'bun') {
                                 return (
                                     <IngredientCard
@@ -53,7 +54,7 @@ const BurgerIngredients = (props) => {
                 <div className={styles.burgerIngredients}>
                     <p className="text text_type_main-medium">Соусы</p>
                     <div className={styles.container}>
-                        {props.data.map((ingredient) => {
+                        {ingredients.map((ingredient) => {
                             if (ingredient.type === 'sauce') {
                                 return (
                                     <IngredientCard
@@ -70,7 +71,7 @@ const BurgerIngredients = (props) => {
                 <div className={styles.burgerIngredients}>
                     <p className="text text_type_main-medium">Начинки</p>
                     <div className={styles.container}>
-                        {props.data.map((ingredient) => {
+                        {ingredients.map((ingredient) => {
                             if (ingredient.type === 'main') {
                                 return (
                                     <IngredientCard

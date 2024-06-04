@@ -12,7 +12,7 @@ import { useModal } from '../../hooks/useModal';
 import PropTypes from 'prop-types';
 import { ingredientType } from '../../utils/types';
 
-const BurgerConstructor = (props) => {
+const BurgerConstructor = ({ ingredients }) => {
     const { isModalOpen, openModal, closeModal } = useModal();
 
     const modal = (
@@ -21,11 +21,12 @@ const BurgerConstructor = (props) => {
         </Modal>
     );
 
+
     return (
         <section>
             <div className="pl-8 pb-4 pt-8">
-                {props.data.map((item) => {
-                    if (item === props.data[0]) {
+                {ingredients.map((item) => {
+                    if (item === ingredients[0]) {
                         return (
                             <ConstructorElement
                                 type="top"
@@ -43,10 +44,10 @@ const BurgerConstructor = (props) => {
             </div>
             <CustomScroll heightRelativeToParent="40vh">
                 <div className={styles['middle-container']}>
-                    {props.data.map((item) => {
+                    {ingredients.map((item) => {
                         if (
-                            item === props.data[0] ||
-                            item === props.data[props.data.length - 1]
+                            item === ingredients[0] ||
+                            item === ingredients[ingredients.length - 1]
                         ) {
                             return null;
                         } else {
@@ -69,8 +70,8 @@ const BurgerConstructor = (props) => {
                 </div>
             </CustomScroll>
             <div className="pl-8 pt-4">
-                {props.data.map((item) => {
-                    if (item === props.data[0]) {
+                {ingredients.map((item) => {
+                    if (item === ingredients[0]) {
                         return (
                             <ConstructorElement
                                 type="bottom"

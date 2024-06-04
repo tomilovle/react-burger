@@ -33,10 +33,10 @@ function App() {
                 </p>
                 <div className={styles.row}>
                     <div className={styles['col-6']}>
-                        <BurgerIngredients data={ingredientsData} />
+                        <BurgerIngredients ingredients={ingredientsData} />
                     </div>
                     <div className={styles['col-6']}>
-                        <BurgerConstructor data={ingredientsData} />
+                        <BurgerConstructor ingredients={ingredientsData} />
                     </div>
                 </div>
             </main>
