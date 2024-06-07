@@ -1,22 +1,64 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+import axios from "axios";
+
+export const createOrder = createAsyncThunk(
+  "order/createOrder",
+  async (burgerConstructor) => {
+    const bun = [burgerConstructor.bun._id];
+    const ingredients = burgerConstructor.constructorIngredients.map(
+      (i) => i._id,
+    );
+    const ingredientsId = {
+      ingredients: bun.concat(ingredients),
+    };
+    const response = await axios.post(
+      "https://norma.nomoreparties.space/api/orders",
+      JSON.stringify(ingredientsId),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+    return response.data;
+  },
+);
 
 const initialState = {
   order: null,
+  number: 0,
+  name: "",
+  status: "none",
+  error: null,
 };
 
 const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
-    addOrder: (state, action) => {
-      state.order = action.payload;
-    },
-    removeOrder: (state, action) => {
+    removeOrder: (state) => {
       state.order = null;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createOrder.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(createOrder.fulfilled, (state, action) => {
+        state.status = "success";
+        state.order = action.payload;
+        state.name = action.payload.name;
+        state.number = action.payload.order.number;
+      })
+      .addCase(createOrder.rejected, (state, action) => {
+        state.status = "error";
+        state.error = action.error.message;
+      });
+  },
 });
 
-export const { addOrder, removeOrder } = orderSlice.actions;
+export const { removeOrder } = orderSlice.actions;
 
 export default orderSlice.reducer;

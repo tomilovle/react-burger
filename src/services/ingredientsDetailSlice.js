@@ -10,12 +10,12 @@ const ingredientsDetailSlice = createSlice({
     setCurrentIngredient: (state, action) => {
       state.currentIngredient = action.payload;
     },
-    clearCurrentIngredients: (state, action) => {
+    clearCurrentIngredient: (state, action) => {
       state.currentIngredient = null;
     },
   },
 });
-export const { setCurrentIngredient, clearCurrentIngredients } =
+export const { setCurrentIngredient, clearCurrentIngredient } =
   ingredientsDetailSlice.actions;
 
 export default ingredientsDetailSlice.reducer;

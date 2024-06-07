@@ -4,6 +4,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devtools: composeWithDevTools(),
 });
 
