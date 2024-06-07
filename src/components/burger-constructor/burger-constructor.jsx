@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -9,12 +9,10 @@ import { CustomScroll } from "react-custom-scroll";
 import Modal from "../modal/modal";
 import { useModal } from "../../hooks/useModal";
 import { useDrop } from "react-dnd";
-import PropTypes from "prop-types";
-import { ingredientType } from "../../utils/types";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addIngredient,
-  setInitialBun,
+  resetConstructor,
 } from "../../services/burgerConstructorSlice";
 import BurgerCard from "./burger-constructor-card";
 import { createOrder } from "../../services/orderSlice";
@@ -28,17 +26,6 @@ const BurgerConstructor = () => {
   const burgerConstructor = useSelector((state) => state.burgerConstructor);
   const ingredients = useSelector((state) => state.ingredients.ingredients);
 
-  useEffect(() => {
-    if (ingredients.length > 0) {
-      const bunInit = ingredients.find(
-        (ingredient) => ingredient.type === "bun",
-      );
-      if (bunInit) {
-        dispatch(setInitialBun(bunInit));
-      }
-    }
-  }, [dispatch, ingredients]);
-
   const orderPrice = useMemo(() => {
     const ingredientsTotal = burgerConstructor.constructorIngredients.reduce(
       (acc, ingredient) => {
@@ -47,7 +34,10 @@ const BurgerConstructor = () => {
       0,
     );
 
-    return ingredientsTotal + burgerConstructor.bun.price * 2;
+    return (
+      ingredientsTotal +
+      (burgerConstructor.bun ? burgerConstructor.bun.price * 2 : 0)
+    );
   }, [burgerConstructor]);
 
   const handleDrop = (droppedItem) => {
@@ -66,7 +56,10 @@ const BurgerConstructor = () => {
   });
 
   const handleOrder = () => {
-    dispatch(createOrder(burgerConstructor));
+    dispatch(createOrder(burgerConstructor)).then(() => {
+      dispatch(resetConstructor());
+    });
+
     openModal();
   };
 
@@ -79,9 +72,9 @@ const BurgerConstructor = () => {
   );
 
   return (
-    <section ref={drop}>
-      <CustomScroll heightRelativeToParent="40vh">
-        <div className="pl-8 pt-8">
+    <section className="middle-container" ref={drop}>
+      <div className="pl-8 pt-8 pb-4">
+        {burgerConstructor.bun && (
           <ConstructorElement
             type="top"
             isLocked={true}
@@ -90,7 +83,16 @@ const BurgerConstructor = () => {
             thumbnail={burgerConstructor.bun.image}
             key={burgerConstructor.bun._id}
           />
-        </div>
+        )}
+        {!burgerConstructor.bun && (
+          <p
+            className={`${styles.attention} text text_type_main-small text_color_inactive`}
+          >
+            Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа
+          </p>
+        )}
+      </div>
+      <CustomScroll heightRelativeToParent="40vh">
         {burgerConstructor.constructorIngredients.map((ingredient, index) => {
           return (
             <BurgerCard
@@ -100,7 +102,9 @@ const BurgerConstructor = () => {
             />
           );
         })}
-        <div className="pl-8 pt-4">
+      </CustomScroll>
+      <div className="pl-8 pt-4">
+        {burgerConstructor.bun && (
           <ConstructorElement
             type="bottom"
             isLocked={true}
@@ -109,8 +113,8 @@ const BurgerConstructor = () => {
             thumbnail={burgerConstructor.bun.image}
             key={burgerConstructor.bun._id}
           />
-        </div>
-      </CustomScroll>
+        )}
+      </div>
 
       <div className={styles.totalCoast}>
         <div className={styles.coast}>
@@ -124,6 +128,7 @@ const BurgerConstructor = () => {
           htmlType="button"
           type="primary"
           size="large"
+          disabled={!burgerConstructor.bun}
         >
           Оформить заказ
         </Button>
@@ -131,10 +136,6 @@ const BurgerConstructor = () => {
       {isModalOpen && modal}
     </section>
   );
-};
-
-BurgerConstructor.propTypes = {
-  data: PropTypes.arrayOf(ingredientType),
 };
 
 export default BurgerConstructor;

@@ -1,12 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 
 export const fetchIngredients = createAsyncThunk(
   "ingredients/fetchIngredients",
   async () => {
-    const response = await axios.get(
-      "https://norma.nomoreparties.space/api/ingredients",
-    );
+    const response = await axiosInstance.get("/ingredients");
     return response.data.data;
   },
 );

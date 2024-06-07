@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 
 export const createOrder = createAsyncThunk(
   "order/createOrder",
@@ -12,8 +11,8 @@ export const createOrder = createAsyncThunk(
     const ingredientsId = {
       ingredients: bun.concat(ingredients),
     };
-    const response = await axios.post(
-      "https://norma.nomoreparties.space/api/orders",
+    const response = await axiosInstance.post(
+      "/orders",
       JSON.stringify(ingredientsId),
       {
         headers: {

@@ -3,8 +3,6 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCard from "./burger-ingredients-card";
 import styles from "./burger-ingredients.module.css";
 import { CustomScroll } from "react-custom-scroll";
-import PropTypes from "prop-types";
-import { ingredientType } from "../../utils/types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../../services/ingredientsSlice";
 
@@ -155,10 +153,6 @@ const BurgerIngredients = () => {
       </CustomScroll>
     </>
   );
-};
-
-BurgerIngredients.propTypes = {
-  data: PropTypes.arrayOf(ingredientType),
 };
 
 export default BurgerIngredients;
