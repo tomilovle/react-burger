@@ -1,114 +1,141 @@
-import styles from './burger-costructor.module.css';
-import OrderDetails from '../details/order-details';
+import React, { useMemo } from "react";
 import {
-    ConstructorElement,
-    DragIcon,
-    CurrencyIcon,
-    Button,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import { CustomScroll } from 'react-custom-scroll';
-import Modal from '../modal/modal';
-import { useModal } from '../../hooks/useModal';
-import PropTypes from 'prop-types';
-import { ingredientType } from '../../utils/types';
+  ConstructorElement,
+  CurrencyIcon,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import { v4 as uuidv4 } from "uuid";
+import { CustomScroll } from "react-custom-scroll";
+import Modal from "../modal/modal";
+import { useModal } from "../../hooks/useModal";
+import { useDrop } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addIngredient,
+  resetConstructor,
+} from "../../services/burgerConstructorSlice";
+import BurgerCard from "./burger-constructor-card";
+import { createOrder } from "../../services/orderSlice";
+import styles from "./burger-costructor.module.css";
+import OrderDetails from "../details/order-details";
 
-const BurgerConstructor = (props) => {
-    const { isModalOpen, openModal, closeModal } = useModal();
+const BurgerConstructor = () => {
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const dispatch = useDispatch();
 
-    const modal = (
-        <Modal header="" onClose={closeModal}>
-            <OrderDetails />
-        </Modal>
+  const burgerConstructor = useSelector((state) => state.burgerConstructor);
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
+
+  const orderPrice = useMemo(() => {
+    const ingredientsTotal = burgerConstructor.constructorIngredients.reduce(
+      (acc, ingredient) => {
+        return acc + ingredient.price;
+      },
+      0,
     );
 
     return (
-        <section>
-            <div className="pl-8 pb-4 pt-8">
-                {props.data.map((item) => {
-                    if (item === props.data[0]) {
-                        return (
-                            <ConstructorElement
-                                type="top"
-                                isLocked={true}
-                                text={item.name + '(верх)'}
-                                price={item.price}
-                                thumbnail={item.image}
-                                key={item._id}
-                            />
-                        );
-                    } else {
-                        return null;
-                    }
-                })}
-            </div>
-            <CustomScroll heightRelativeToParent="40vh">
-                <div className={styles['middle-container']}>
-                    {props.data.map((item) => {
-                        if (
-                            item === props.data[0] ||
-                            item === props.data[props.data.length - 1]
-                        ) {
-                            return null;
-                        } else {
-                            return (
-                                <div key={item._id}>
-                                    <span className="pr-2">
-                                        <DragIcon type="primary" />
-                                    </span>
-                                    <ConstructorElement
-                                        isLocked={false}
-                                        text={item.name}
-                                        price={item.price}
-                                        thumbnail={item.image}
-                                        key={item._id}
-                                    />
-                                </div>
-                            );
-                        }
-                    })}
-                </div>
-            </CustomScroll>
-            <div className="pl-8 pt-4">
-                {props.data.map((item) => {
-                    if (item === props.data[0]) {
-                        return (
-                            <ConstructorElement
-                                type="bottom"
-                                isLocked={true}
-                                text={item.name + '(низ)'}
-                                price={item.price}
-                                thumbnail={item.image}
-                                key={item._id}
-                            />
-                        );
-                    } else {
-                        return null;
-                    }
-                })}
-            </div>
-            <div className={styles.totalCoast}>
-                <span className={styles.coast}>
-                    <span className="text text_type_digits-medium pr-1">
-                        610
-                    </span>
-                    <CurrencyIcon type="primary" />
-                </span>
-                <Button
-                    onClick={openModal}
-                    htmlType="button"
-                    type="primary"
-                    size="large"
-                >
-                    Оформить заказ
-                </Button>
-                {isModalOpen && modal}
-            </div>
-        </section>
+      ingredientsTotal +
+      (burgerConstructor.bun ? burgerConstructor.bun.price * 2 : 0)
     );
-};
+  }, [burgerConstructor]);
 
-BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(ingredientType),
+  const handleDrop = (droppedItem) => {
+    const { id } = droppedItem;
+    const index = ingredients.findIndex((item) => item._id === id);
+    const newItem = {
+      ...ingredients[index],
+      key: uuidv4(),
+    };
+    dispatch(addIngredient(newItem));
+  };
+
+  const [, drop] = useDrop({
+    accept: "ingredient",
+    drop: (item) => handleDrop(item),
+  });
+
+  const handleOrder = () => {
+    dispatch(createOrder(burgerConstructor)).then(() => {
+      dispatch(resetConstructor());
+    });
+
+    openModal();
+  };
+
+  const orderName = useSelector((state) => state.orderReducer.name);
+
+  const modal = (
+    <Modal header={orderName} onClose={closeModal}>
+      <OrderDetails />
+    </Modal>
+  );
+
+  return (
+    <section className="middle-container" ref={drop}>
+      <div className="pl-8 pt-8 pb-4">
+        {burgerConstructor.bun && (
+          <ConstructorElement
+            type="top"
+            isLocked={true}
+            text={burgerConstructor.bun.name + "(верх)"}
+            price={burgerConstructor.bun.price}
+            thumbnail={burgerConstructor.bun.image}
+            key={burgerConstructor.bun._id}
+          />
+        )}
+        {!burgerConstructor.bun && (
+          <p
+            className={`${styles.attention} text text_type_main-small text_color_inactive`}
+          >
+            Пожалуйста, перенесите сюда булку и ингредиенты для создания заказа
+          </p>
+        )}
+      </div>
+      <CustomScroll heightRelativeToParent="40vh">
+        {burgerConstructor.constructorIngredients.map((ingredient, index) => {
+          return (
+            <BurgerCard
+              key={ingredient.key}
+              ingredient={ingredient}
+              currentIndex={index}
+            />
+          );
+        })}
+      </CustomScroll>
+      <div className="pl-8 pt-4">
+        {burgerConstructor.bun && (
+          <ConstructorElement
+            type="bottom"
+            isLocked={true}
+            text={burgerConstructor.bun.name + "(низ)"}
+            price={burgerConstructor.bun.price}
+            thumbnail={burgerConstructor.bun.image}
+            key={burgerConstructor.bun._id}
+          />
+        )}
+      </div>
+
+      <div className={styles.totalCoast}>
+        <div className={styles.coast}>
+          <span className="text text_type_digits-medium pr-2">
+            {orderPrice}
+          </span>
+          <CurrencyIcon type="primary" />
+        </div>
+        <Button
+          onClick={handleOrder}
+          htmlType="button"
+          type="primary"
+          size="large"
+          disabled={!burgerConstructor.bun}
+        >
+          Оформить заказ
+        </Button>
+      </div>
+      {isModalOpen && modal}
+    </section>
+  );
 };
 
 export default BurgerConstructor;

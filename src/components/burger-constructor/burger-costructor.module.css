@@ -1,7 +1,5 @@
 .middle-container {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    position: relative;
 }
 .totalCoast {
     display: flex;
@@ -17,4 +15,31 @@
 .coast svg {
     width: 36px;
     height: 36px;
+}
+.card {
+    cursor: grab;
+}
+.attention {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid #8585AD;
+    animation: cursor 0.75s step-end infinite, printed_text 10s steps(67);
+}
+@keyframes cursor {
+    0% {
+        border-color: #8585AD;
+    }
+    50% {
+        border-color: transparent;
+    }
+    100% {
+        border-color: #8585AD;
+    }
+}
+
+@keyframes printed_text {
+    from {
+        width: 0;
+    }
 }

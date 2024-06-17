@@ -7,15 +7,9 @@
     min-width: 720px;
     background-color: #1c1c21;
     padding: 40px;
+    padding-right: 80px;
     border: 1px solid rgba(76, 76, 255, 0.2);
     border-radius: 40px;
-}
-.header {
-    font-family: 'Jet Brains Mono';
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 111%;
-    color: #f2f2f3;
 }
 .modal-content {
     display: block;
