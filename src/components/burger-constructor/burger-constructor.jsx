@@ -18,14 +18,16 @@ import BurgerCard from "./burger-constructor-card";
 import { createOrder } from "../../services/orderSlice";
 import styles from "./burger-costructor.module.css";
 import OrderDetails from "../details/order-details";
+import { useNavigate } from "react-router-dom";
 
 const BurgerConstructor = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const burgerConstructor = useSelector((state) => state.burgerConstructor);
   const ingredients = useSelector((state) => state.ingredients.ingredients);
-
+  const { userInfo } = useSelector((state) => state.user);
   const orderPrice = useMemo(() => {
     const ingredientsTotal = burgerConstructor.constructorIngredients.reduce(
       (acc, ingredient) => {
@@ -56,11 +58,14 @@ const BurgerConstructor = () => {
   });
 
   const handleOrder = () => {
-    dispatch(createOrder(burgerConstructor)).then(() => {
-      dispatch(resetConstructor());
-    });
-
-    openModal();
+    if (userInfo) {
+      dispatch(createOrder(burgerConstructor)).then(() => {
+        dispatch(resetConstructor());
+      });
+      openModal();
+    } else {
+      navigate("/login");
+    }
   };
 
   const orderName = useSelector((state) => state.orderReducer.name);

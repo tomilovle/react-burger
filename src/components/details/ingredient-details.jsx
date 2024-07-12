@@ -1,70 +1,88 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./details.module.css";
-import { ingredientType } from "../../utils/types";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
   setCurrentIngredient,
   clearCurrentIngredient,
 } from "../../services/ingredientsDetailSlice";
+import { fetchIngredients } from "../../services/ingredientsSlice";
 
-const IngredientDetails = ({ ingredient }) => {
+const IngredientDetails = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const ingredients = useSelector((state) => state.ingredients.ingredients);
+  const currentIngredient = useSelector(
+    (state) => state.ingredientsDetail.currentIngredient,
+  );
+  const [localCurrentIngredient, setLocalCurrentIngredient] = useState(null);
 
   useEffect(() => {
-    if (ingredient) {
-      dispatch(setCurrentIngredient(ingredient));
+    if (!ingredients.length) {
+      dispatch(fetchIngredients());
+    }
+  }, [dispatch, ingredients.length]);
+
+  useEffect(() => {
+    if (id && ingredients.length) {
+      const ingredient = ingredients.find((item) => item._id === id);
+      if (ingredient) {
+        dispatch(setCurrentIngredient(ingredient));
+        setLocalCurrentIngredient(ingredient);
+      }
     }
     return () => {
       dispatch(clearCurrentIngredient());
     };
-  }, [ingredient, dispatch]);
+  }, [id, ingredients, dispatch]);
 
-  const currentIngredient = useSelector(
-    (state) => state.ingredientsDetail.currentIngredient,
-  );
+  useEffect(() => {
+    if (currentIngredient) {
+      setLocalCurrentIngredient(currentIngredient);
+    }
+  }, [currentIngredient]);
 
-  if (!currentIngredient) {
-    return null;
+  if (!localCurrentIngredient) {
+    return <div>Loading...</div>;
   }
 
   return (
     <div className={styles.modal}>
-      <img src={currentIngredient.image_large} alt={currentIngredient.name} />
+      <img
+        src={localCurrentIngredient.image_large}
+        alt={localCurrentIngredient.name}
+      />
       <p className="text text_type_main-medium mt-4">
-        {currentIngredient.name}
+        {localCurrentIngredient.name}
       </p>
       <div className={styles.desc}>
         <div className={styles.item}>
           <span className="text text_type_main-default pt-8">Калории,ккал</span>
           <span className="text text_type_digits-default">
-            {currentIngredient.calories}
+            {localCurrentIngredient.calories}
           </span>
         </div>
         <div className={styles.item}>
           <span className="text text_type_main-default pt-8">Белки, г</span>
           <span className="text text_type_digits-default">
-            {currentIngredient.proteins}
+            {localCurrentIngredient.proteins}
           </span>
         </div>
         <div className={styles.item}>
           <span className="text text_type_main-default pt-8">Жиры, г</span>
           <span className="text text_type_digits-default">
-            {currentIngredient.fat}
+            {localCurrentIngredient.fat}
           </span>
         </div>
         <div className={styles.item}>
           <span className="text text_type_main-default pt-8">Углеводы, г</span>
           <span className="text text_type_digits-default">
-            {currentIngredient.carbohydrates}
+            {localCurrentIngredient.carbohydrates}
           </span>
         </div>
       </div>
     </div>
   );
-};
-
-IngredientDetails.propTypes = {
-  ingredient: ingredientType,
 };
 
 export default IngredientDetails;
