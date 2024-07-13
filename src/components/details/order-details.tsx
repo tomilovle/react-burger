@@ -1,13 +1,14 @@
-import React from "react";
+import React, { FC } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./details.module.css";
 import done from "../../images/done.png";
+import { RootState } from "../../services/rootReducer";
 
-const OrderDetails = () => {
-  const number = useSelector((state) => state.orderReducer.number);
-  const status = useSelector((state) => state.orderReducer.status);
-  const error = useSelector((state) => state.orderReducer.error);
+const OrderDetails: FC = () => {
+  const number = useSelector((state: RootState) => state.orderReducer.number);
+  const status = useSelector((state: RootState) => state.orderReducer.status);
+  const error = useSelector((state: RootState) => state.orderReducer.error);
 
   if (status === "loading") {
     return <p className="text text_type_main-medium">Loading...</p>;
@@ -19,7 +20,10 @@ const OrderDetails = () => {
 
   return (
     <div className={styles.modal}>
-      <p className="text text_type_digits-large pt-20">{number}</p>
+      <p className="text text_type_digits-large pt-20">
+        {" "}
+        {number !== null ? number : "No Order Number"}
+      </p>
       <p className="text text_type_main-medium pt-8">идентификатор заказа</p>
       <img src={done} alt="done" className=" pt-15" />
       <p className="text text_type_main-small pt-15">

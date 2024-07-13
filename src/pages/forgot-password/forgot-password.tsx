@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import styles from "./forgot-password.module.css";
 import {
   EmailInput,
@@ -9,30 +9,20 @@ import { Layout } from "../../components/layout/layout";
 import { useDispatch } from "react-redux";
 import { forgotPassword } from "../../services/userSlice";
 
-export const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [errors, setErrors] = useState({});
+export const ForgotPassword: FC = () => {
+  const [email, setEmail] = useState<string>("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const sendData = (e) => {
+  const sendData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
-
-    dispatch(forgotPassword(email))
-      .then(setEmail(""))
-      .then(navigate("/reset-password"));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!email) newErrors.email = "E-mail обязателен";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    // @ts-ignore
+    dispatch(forgotPassword(email)).then(() => {
+      setEmail("");
+      navigate("/reset-password");
+    });
   };
 
   return (
@@ -42,13 +32,10 @@ export const ForgotPassword = () => {
 
         <div className="mb-6">
           <EmailInput
-            type={"email"}
             placeholder={"Укажите e-mail"}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             name={"e-mail"}
-            error={!!errors.email}
-            errorText={errors.email}
             size={"default"}
           />
         </div>

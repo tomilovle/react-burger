@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, FC } from "react";
 import {
   ConstructorElement,
   CurrencyIcon,
@@ -19,18 +19,25 @@ import { createOrder } from "../../services/orderSlice";
 import styles from "./burger-costructor.module.css";
 import OrderDetails from "../details/order-details";
 import { useNavigate } from "react-router-dom";
+import { IIngredient, IIngredientWithKey } from "../../types/ingredient";
+import { DropCollectedProps } from "../../types/dnd";
+import { RootState } from "../../services/rootReducer";
 
-const BurgerConstructor = () => {
+const BurgerConstructor: FC = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const burgerConstructor = useSelector((state) => state.burgerConstructor);
-  const ingredients = useSelector((state) => state.ingredients.ingredients);
-  const { userInfo } = useSelector((state) => state.user);
+  const burgerConstructor = useSelector(
+    (state: any) => state.burgerConstructor,
+  );
+  const ingredients = useSelector(
+    (state: any) => state.ingredients.ingredients,
+  );
+  const { userInfo } = useSelector((state: RootState) => state.user);
   const orderPrice = useMemo(() => {
     const ingredientsTotal = burgerConstructor.constructorIngredients.reduce(
-      (acc, ingredient) => {
+      (acc: number, ingredient: IIngredient) => {
         return acc + ingredient.price;
       },
       0,
@@ -42,9 +49,9 @@ const BurgerConstructor = () => {
     );
   }, [burgerConstructor]);
 
-  const handleDrop = (droppedItem) => {
+  const handleDrop = (droppedItem: { id: string }) => {
     const { id } = droppedItem;
-    const index = ingredients.findIndex((item) => item._id === id);
+    const index = ingredients.findIndex((item: IIngredient) => item._id === id);
     const newItem = {
       ...ingredients[index],
       key: uuidv4(),
@@ -52,13 +59,14 @@ const BurgerConstructor = () => {
     dispatch(addIngredient(newItem));
   };
 
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<{ id: string }, void, DropCollectedProps>({
     accept: "ingredient",
     drop: (item) => handleDrop(item),
   });
 
   const handleOrder = () => {
     if (userInfo) {
+      // @ts-ignore
       dispatch(createOrder(burgerConstructor)).then(() => {
         dispatch(resetConstructor());
       });
@@ -68,7 +76,7 @@ const BurgerConstructor = () => {
     }
   };
 
-  const orderName = useSelector((state) => state.orderReducer.name);
+  const orderName = useSelector((state: RootState) => state.orderReducer.name);
 
   const modal = (
     <Modal header={orderName} onClose={closeModal}>
@@ -98,15 +106,17 @@ const BurgerConstructor = () => {
         )}
       </div>
       <CustomScroll heightRelativeToParent="40vh">
-        {burgerConstructor.constructorIngredients.map((ingredient, index) => {
-          return (
-            <BurgerCard
-              key={ingredient.key}
-              ingredient={ingredient}
-              currentIndex={index}
-            />
-          );
-        })}
+        {burgerConstructor.constructorIngredients.map(
+          (ingredient: IIngredientWithKey, index: number) => {
+            return (
+              <BurgerCard
+                key={ingredient.key}
+                ingredient={ingredient}
+                currentIndex={index}
+              />
+            );
+          },
+        )}
       </CustomScroll>
       <div className="pl-8 pt-4">
         {burgerConstructor.bun && (

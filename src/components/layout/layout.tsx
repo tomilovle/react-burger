@@ -1,7 +1,12 @@
+import React, { FC, ReactNode } from "react";
 import AppHeader from "../app-header/app-header";
 import styles from "./layout.module.css";
 
-export const Layout = ({ children }) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <AppHeader />

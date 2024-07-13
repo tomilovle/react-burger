@@ -4,12 +4,15 @@ import { useDispatch } from "react-redux";
 import { Layout } from "../../components/layout/layout";
 import { UserData } from "../../components/user-data/user-data";
 import { logout } from "../../services/userSlice";
+import { FC } from "react";
 
-const Profile = () => {
+const Profile: FC = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     const refreshToken = localStorage.getItem("refreshToken");
+
+    // @ts-ignore
     dispatch(logout(refreshToken));
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styles from "./login.module.css";
 import {
   EmailInput,
@@ -9,37 +9,29 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "../../components/layout/layout";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../services/userSlice";
+import { RootState } from "../../services/rootReducer";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
 
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!email) newErrors.email = "E-mail обязателен";
-    if (!password) newErrors.password = "Пароль обязателен";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const onChangePass = (e) => {
+  const onChangePass = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const sendData = (e) => {
+  const sendData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!validateForm()) {
+    if (!email || !password) {
       return;
     }
     navigate(-1);
+    // @ts-ignore
     dispatch(login({ email, password }));
   };
 
@@ -56,14 +48,13 @@ export const Login = () => {
         <p className="text text_type_main-medium mb-6">Вход</p>
         <div className="mb-6">
           <EmailInput
+            // @ts-ignore
             type={"email"}
             placeholder={"E-mail"}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             name={"e-mail"}
             size={"default"}
-            error={!!errors.email}
-            errorText={errors.email}
           />
         </div>
 
@@ -72,8 +63,6 @@ export const Login = () => {
             onChange={onChangePass}
             value={password}
             name={"password"}
-            error={!!errors.password}
-            errorText={errors.password}
           />
         </div>
 

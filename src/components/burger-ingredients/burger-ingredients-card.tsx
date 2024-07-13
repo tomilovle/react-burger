@@ -1,10 +1,14 @@
 import styles from "./burger-ingredients.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ingredientType } from "../../utils/types";
 import { useDrag } from "react-dnd";
 import { Link, useLocation } from "react-router-dom";
+import { FC } from "react";
+import { IIngredient } from "../../types/ingredient";
 
-const IngredientCard = ({ ingredient }) => {
+interface IIngredientCardProps {
+  ingredient: IIngredient;
+}
+const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
   const location = useLocation();
 
   const [, dragRef] = useDrag({
@@ -35,10 +39,6 @@ const IngredientCard = ({ ingredient }) => {
       </Link>
     </>
   );
-};
-
-IngredientCard.propTypes = {
-  ingredient: ingredientType,
 };
 
 export default IngredientCard;
