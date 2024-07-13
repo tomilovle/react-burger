@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
 import styles from "./reset-password.module.css";
 import {
   Input,
@@ -10,20 +10,20 @@ import { Layout } from "../../components/layout/layout";
 import { useDispatch } from "react-redux";
 import { resetPassword } from "../../services/userSlice";
 
-export const ResetPassword = () => {
+export const ResetPassword: FC = () => {
   const [token, setToken] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const sendData = (e) => {
+  const sendData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!token || !password) {
       return;
     }
-
+    // @ts-ignore
     dispatch(resetPassword({ password, token }));
     setToken("");
     setPassword("");
@@ -49,6 +49,7 @@ export const ResetPassword = () => {
             placeholder={"Введите код из письма"}
             onChange={(e) => setToken(e.target.value)}
             name={"code"}
+            value={token}
             size={"default"}
           />
         </div>

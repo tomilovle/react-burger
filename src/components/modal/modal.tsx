@@ -3,8 +3,15 @@ import ReactDOM from "react-dom";
 import ModalOverlay from "./modal-overlay";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import PropTypes from "prop-types";
+import { FC, ReactNode } from "react";
 
-const Modal = ({ children, header, onClose }) => {
+interface IModalProps {
+  children: ReactNode;
+  header: string;
+  onClose: () => void;
+}
+
+const Modal: FC<IModalProps> = ({ children, header, onClose }) => {
   return ReactDOM.createPortal(
     <>
       <div className={styles.modal}>
@@ -16,7 +23,7 @@ const Modal = ({ children, header, onClose }) => {
       </div>
       <ModalOverlay onClose={onClose} />
     </>,
-    document.getElementById("react-modals"),
+    document.getElementById("react-modals") as HTMLElement,
   );
 };
 

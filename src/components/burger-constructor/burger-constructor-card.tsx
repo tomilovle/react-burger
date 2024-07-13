@@ -1,6 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, FC } from "react";
 import { useDispatch } from "react-redux";
-import { useDrag, useDrop } from "react-dnd";
+import {
+  useDrag,
+  useDrop,
+  DragSourceMonitor,
+  DropTargetMonitor,
+} from "react-dnd";
 import {
   ConstructorElement,
   DragIcon,
@@ -9,23 +14,33 @@ import {
   deleteIngredient,
   moveIngredient,
 } from "../../services/burgerConstructorSlice";
-import { ingredientType } from "../../utils/types";
 import styles from "./burger-costructor.module.css";
+import { IIngredient } from "../../types/ingredient";
+import {
+  DragCollectedProps,
+  DraggedItem,
+  DropCollectedProps,
+} from "../../types/dnd";
 
-const BurgerCard = ({ ingredient, currentIndex }) => {
+interface IBurgerCardProps {
+  ingredient: IIngredient;
+  currentIndex: number;
+}
+
+const BurgerCard: FC<IBurgerCardProps> = ({ ingredient, currentIndex }) => {
   const dispatch = useDispatch();
-  const ingredientRef = useRef(null);
+  const ingredientRef = useRef<HTMLDivElement | null>(null);
 
-  const handleDeleteIngredient = (ingredient) => {
+  const handleDeleteIngredient = (ingredient: IIngredient) => {
     dispatch(deleteIngredient(ingredient));
   };
 
-  const [{ handlerId }, connectDrop] = useDrop({
+  const [, connectDrop] = useDrop<DraggedItem, void, DropCollectedProps>({
     accept: "sorting",
-    collect: (monitor) => ({
+    collect: (monitor: DropTargetMonitor) => ({
       handlerId: monitor.getHandlerId(),
     }),
-    hover: (draggedItem, monitor) => {
+    hover: (draggedItem: DraggedItem, monitor: DropTargetMonitor) => {
       if (!ingredientRef.current) return;
 
       const fromIndex = draggedItem.index;
@@ -36,7 +51,7 @@ const BurgerCard = ({ ingredient, currentIndex }) => {
       const boundingRect = ingredientRef.current.getBoundingClientRect();
       const middle = (boundingRect.bottom - boundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const client = clientOffset.y - boundingRect.top;
+      const client = clientOffset!.y - boundingRect.top;
 
       if (fromIndex < toIndex && client < middle) return;
       if (fromIndex > toIndex && client > middle) return;
@@ -46,10 +61,10 @@ const BurgerCard = ({ ingredient, currentIndex }) => {
     },
   });
 
-  const [{ isDragging }, connectDrag] = useDrag({
+  const [, connectDrag] = useDrag<DraggedItem, void, DragCollectedProps>({
     type: "sorting",
     item: { index: currentIndex },
-    collect: (monitor) => ({
+    collect: (monitor: DragSourceMonitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
@@ -74,10 +89,6 @@ const BurgerCard = ({ ingredient, currentIndex }) => {
       />
     </div>
   );
-};
-
-BurgerCard.propTypes = {
-  ingredient: ingredientType,
 };
 
 export default BurgerCard;

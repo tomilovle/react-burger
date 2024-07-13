@@ -6,8 +6,9 @@ import {
   Logo,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink } from "react-router-dom";
+import { FC } from "react";
 
-const AppHeader = () => {
+const AppHeader: FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.links}>

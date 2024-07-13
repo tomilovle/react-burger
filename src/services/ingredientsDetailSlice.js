@@ -10,7 +10,7 @@ const ingredientsDetailSlice = createSlice({
     setCurrentIngredient: (state, action) => {
       state.currentIngredient = action.payload;
     },
-    clearCurrentIngredient: (state, action) => {
+    clearCurrentIngredient: (state) => {
       state.currentIngredient = null;
     },
   },

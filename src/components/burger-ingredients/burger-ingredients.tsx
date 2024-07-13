@@ -5,21 +5,34 @@ import styles from "./burger-ingredients.module.css";
 import { CustomScroll } from "react-custom-scroll";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../../services/ingredientsSlice";
+import { FC } from "react";
+import { IIngredient } from "../../types/ingredient";
+import { RootState } from "../../services/rootReducer";
 
-const BurgerIngredients = () => {
-  const [current, setCurrent] = useState("bun");
+const BurgerIngredients: FC = () => {
+  const [current, setCurrent] = useState<string>("bun");
 
   const dispatch = useDispatch();
-  const ingredients = useSelector((state) => state.ingredients.ingredients);
-  const status = useSelector((state) => state.ingredients.status);
-  const error = useSelector((state) => state.ingredients.error);
+  const ingredients = useSelector(
+    (state: RootState) => state.ingredients.ingredients,
+  );
+  const status = useSelector((state: RootState) => state.ingredients.status);
+  const error = useSelector((state: RootState) => state.ingredients.error);
 
-  const tabRef = useRef(null);
-  const bunRef = useRef(null);
-  const sauceRef = useRef(null);
-  const mainRef = useRef(null);
+  const tabRef = useRef<HTMLDivElement | null>(null);
+  const bunRef = useRef<HTMLDivElement | null>(null);
+  const sauceRef = useRef<HTMLDivElement | null>(null);
+  const mainRef = useRef<HTMLDivElement | null>(null);
 
   const handleIngredientScroll = () => {
+    if (
+      !tabRef.current ||
+      !bunRef.current ||
+      !sauceRef.current ||
+      !mainRef.current
+    ) {
+      return;
+    }
     const tabsYPosition = tabRef.current.getBoundingClientRect().y;
     const bunsYPosition = Math.abs(
       bunRef.current.getBoundingClientRect().y - tabsYPosition,
@@ -55,9 +68,12 @@ const BurgerIngredients = () => {
     }
   }, [status, dispatch]);
 
-  const handleTabClick = (type, ref) => {
+  const handleTabClick = (
+    type: string,
+    ref: React.RefObject<HTMLDivElement>,
+  ) => {
     setCurrent(type);
-    ref.current.scrollIntoView({ behavior: "smooth" });
+    ref.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   if (status === "loading") {
@@ -101,7 +117,7 @@ const BurgerIngredients = () => {
           <div className={styles.burgerIngredients} ref={bunRef}>
             <p className="text text_type_main-medium">Булки</p>
             <div className={styles.container}>
-              {ingredients.map((ingredient) => {
+              {ingredients.map((ingredient: IIngredient) => {
                 if (ingredient.type === "bun") {
                   return (
                     <IngredientCard
@@ -118,7 +134,7 @@ const BurgerIngredients = () => {
           <div className={styles.burgerIngredients} ref={sauceRef}>
             <p className="text text_type_main-medium">Соусы</p>
             <div className={styles.container}>
-              {ingredients.map((ingredient) => {
+              {ingredients.map((ingredient: IIngredient) => {
                 if (ingredient.type === "sauce") {
                   return (
                     <IngredientCard
@@ -135,7 +151,7 @@ const BurgerIngredients = () => {
           <div className={styles.burgerIngredients} ref={mainRef}>
             <p className="text text_type_main-medium">Начинки</p>
             <div className={styles.container}>
-              {ingredients.map((ingredient) => {
+              {ingredients.map((ingredient: IIngredient) => {
                 if (ingredient.type === "main") {
                   return (
                     <IngredientCard

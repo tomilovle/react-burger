@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./details.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -7,15 +7,20 @@ import {
   clearCurrentIngredient,
 } from "../../services/ingredientsDetailSlice";
 import { fetchIngredients } from "../../services/ingredientsSlice";
+import { IIngredient } from "../../types/ingredient";
+import { RootState } from "../../services/rootReducer";
 
-const IngredientDetails = () => {
+const IngredientDetails: FC = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const ingredients = useSelector((state) => state.ingredients.ingredients);
-  const currentIngredient = useSelector(
-    (state) => state.ingredientsDetail.currentIngredient,
+  const ingredients = useSelector(
+    (state: RootState) => state.ingredients.ingredients,
   );
-  const [localCurrentIngredient, setLocalCurrentIngredient] = useState(null);
+  const currentIngredient = useSelector(
+    (state: RootState) => state.ingredientsDetail.currentIngredient,
+  );
+  const [localCurrentIngredient, setLocalCurrentIngredient] =
+    useState<IIngredient | null>(null);
 
   useEffect(() => {
     if (!ingredients.length) {
@@ -25,7 +30,9 @@ const IngredientDetails = () => {
 
   useEffect(() => {
     if (id && ingredients.length) {
-      const ingredient = ingredients.find((item) => item._id === id);
+      const ingredient = ingredients.find(
+        (item: IIngredient) => item._id === id,
+      );
       if (ingredient) {
         dispatch(setCurrentIngredient(ingredient));
         setLocalCurrentIngredient(ingredient);
