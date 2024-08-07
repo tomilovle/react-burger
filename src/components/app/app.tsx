@@ -17,16 +17,31 @@ import Profile from "../../pages/profile/profile";
 import ProtectedRouteElement from "../ProtectedRouteElement";
 import Modal from "../modal/modal";
 import IngredientDetails from "../details/ingredient-details";
+import OrdersFeed from "../../pages/orders-feed/orders-feed";
+import OrderList from "../../pages/order-list/order-list";
+import { Layout } from "../layout/layout";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getUserData } from "../../services/userSlice";
 
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const background = location.state?.background;
 
   const handleModalClose = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      // @ts-ignore
+      dispatch(getUserData(token.replace("Bearer ", "")));
+    }
+  }, [dispatch]);
 
   return (
     <>
@@ -72,7 +87,25 @@ function AppContent() {
             </ProtectedRouteElement>
           }
         />
+
         <Route path="ingredients/:id" element={<Ingredients />} />
+        <Route path="feed" element={<OrdersFeed />} />
+        <Route
+          path="feed/:id"
+          element={
+            <Layout>
+              <OrderList />
+            </Layout>
+          }
+        />
+        <Route
+          path="profile/orders/:id"
+          element={
+            <Layout>
+              <OrderList />
+            </Layout>
+          }
+        />
       </Routes>
       {background && (
         <Routes>
@@ -81,6 +114,22 @@ function AppContent() {
             element={
               <Modal header="Ингредиенты" onClose={handleModalClose}>
                 <IngredientDetails />
+              </Modal>
+            }
+          />
+          <Route
+            path="feed/:id"
+            element={
+              <Modal header="" onClose={handleModalClose}>
+                <OrderList />
+              </Modal>
+            }
+          />
+          <Route
+            path="profile/orders/:id"
+            element={
+              <Modal header="" onClose={handleModalClose}>
+                <OrderList />
               </Modal>
             }
           />

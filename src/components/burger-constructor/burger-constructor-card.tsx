@@ -15,7 +15,7 @@ import {
   moveIngredient,
 } from "../../services/burgerConstructorSlice";
 import styles from "./burger-costructor.module.css";
-import { IIngredient } from "../../types/ingredient";
+import { IIngredientWithKey } from "../../types/ingredient";
 import {
   DragCollectedProps,
   DraggedItem,
@@ -23,7 +23,7 @@ import {
 } from "../../types/dnd";
 
 interface IBurgerCardProps {
-  ingredient: IIngredient;
+  ingredient: IIngredientWithKey;
   currentIndex: number;
 }
 
@@ -31,7 +31,7 @@ const BurgerCard: FC<IBurgerCardProps> = ({ ingredient, currentIndex }) => {
   const dispatch = useDispatch();
   const ingredientRef = useRef<HTMLDivElement | null>(null);
 
-  const handleDeleteIngredient = (ingredient: IIngredient) => {
+  const handleDeleteIngredient = (ingredient: IIngredientWithKey) => {
     dispatch(deleteIngredient(ingredient));
   };
 

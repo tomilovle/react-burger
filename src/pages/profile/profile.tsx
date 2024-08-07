@@ -5,6 +5,7 @@ import { Layout } from "../../components/layout/layout";
 import { UserData } from "../../components/user-data/user-data";
 import { logout } from "../../services/userSlice";
 import { FC } from "react";
+import OrdersList from "../orders-list/orders-list";
 
 const Profile: FC = () => {
   const dispatch = useDispatch();
@@ -67,10 +68,10 @@ const Profile: FC = () => {
             </p>
           </nav>
         </div>
-        <div className={styles["col-4"]}>
+        <div className={styles["col-8"]}>
           <Routes>
             <Route index element={<UserData />} />
-            <Route path="orders" element={<div>нет такого</div>} />
+            <Route path="orders" element={<OrdersList />} />
           </Routes>
         </div>
       </div>

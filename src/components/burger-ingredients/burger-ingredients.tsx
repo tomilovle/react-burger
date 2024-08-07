@@ -64,6 +64,7 @@ const BurgerIngredients: FC = () => {
 
   useEffect(() => {
     if (status === "none") {
+      // @ts-ignore
       dispatch(fetchIngredients());
     }
   }, [status, dispatch]);
