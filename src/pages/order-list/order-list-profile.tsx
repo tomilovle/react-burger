@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styles from "./order-list.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import {
   fetchOrdersThunk,
@@ -25,20 +25,27 @@ export const OrderStatusOutput = {
   DONE: "Выполнен",
 };
 
-const OrderList = ({ style }: IOrderDetails) => {
+const OrderListProfile = ({ style }: IOrderDetails) => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
 
   const { orders } = useAppSelector((state) => state.wsOrderReducer);
-  // const token = useAppSelector(selectAccessToken);
+  const token = useAppSelector(selectAccessToken);
 
   const ordersFromSockets = orders?.find((o) => String(o.number) === id);
 
   useEffect(() => {
-    if (!ordersFromSockets) {
-      dispatch(fetchOrdersThunk());
+    if (token) {
+      dispatch({
+        type: WS_ORDER_ACTIONS.wsInitWithCustomUrl,
+        payload: `wss://norma.nomoreparties.space/orders?token=${token.replace("Bearer ", "")}`,
+      });
     }
-  }, [ordersFromSockets]);
+
+    return () => {
+      dispatch({ type: WS_ORDER_ACTIONS.wsClose });
+    };
+  }, [token]);
 
   useModifyOrders();
 
@@ -115,4 +122,4 @@ const OrderList = ({ style }: IOrderDetails) => {
   );
 };
 
-export default OrderList;
+export default OrderListProfile;

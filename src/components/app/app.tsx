@@ -23,6 +23,7 @@ import { Layout } from "../layout/layout";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getUserData } from "../../services/userSlice";
+import OrderListProfile from "../../pages/order-list/order-list-profile";
 
 function AppContent() {
   const location = useLocation();
@@ -102,7 +103,7 @@ function AppContent() {
           path="profile/orders/:id"
           element={
             <Layout>
-              <OrderList />
+              <OrderListProfile />
             </Layout>
           }
         />
