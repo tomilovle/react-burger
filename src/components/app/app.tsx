@@ -6,6 +6,7 @@ import {
   Route,
   useLocation,
   useNavigate,
+  HashRouter,
 } from "react-router-dom";
 import { Main } from "../main/main";
 import { Login } from "../../pages/login/login";
@@ -143,9 +144,9 @@ function AppContent() {
 function App() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <BrowserRouter>
+      <HashRouter>
         <AppContent />
-      </BrowserRouter>
+      </HashRouter>
     </DndProvider>
   );
 }
