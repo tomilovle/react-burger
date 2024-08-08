@@ -22,14 +22,14 @@ import OrdersFeed from "../../pages/orders-feed/orders-feed";
 import OrderList from "../../pages/order-list/order-list";
 import { Layout } from "../layout/layout";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { getUserData } from "../../services/userSlice";
 import OrderListProfile from "../../pages/order-list/order-list-profile";
+import { useAppDispatch } from "../../hooks/hook";
 
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const background = location.state?.background;
 

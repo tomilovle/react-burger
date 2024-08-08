@@ -1,4 +1,5 @@
 import reducer, {
+  initialState,
   setCurrentIngredient,
   clearCurrentIngredient,
 } from "./ingredientsDetailSlice";
@@ -17,14 +18,6 @@ const MOCK_INGREDIENT = {
   image_mobile: "https://code.s3.yandex.net/react/code/meat-03-mobile.png",
   image_large: "https://code.s3.yandex.net/react/code/meat-03-large.png",
   __v: 0,
-};
-
-interface IngredientsDetailState {
-  currentIngredient: IIngredient | null;
-}
-
-const initialState: IngredientsDetailState = {
-  currentIngredient: null,
 };
 
 describe("ingredientsDetailSlice", () => {

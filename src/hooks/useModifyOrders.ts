@@ -2,7 +2,6 @@ import { useEffect, useMemo } from "react";
 import { selectOrders, updateOrders } from "../services/wsOrdersSlice";
 import { TModifiedIngredient } from "../types/order";
 import { useAppDispatch, useAppSelector } from "./hook";
-import { useSelector } from "react-redux";
 import { RootState } from "../services/rootReducer";
 import { fetchIngredients } from "../services/ingredientsSlice";
 
@@ -16,7 +15,7 @@ export const useModifyOrders = () => {
   const dispatch = useAppDispatch();
 
   const orders = useAppSelector(selectOrders);
-  const ingredients = useSelector(
+  const ingredients = useAppSelector(
     (state: RootState) => state.ingredients.ingredients,
   );
 

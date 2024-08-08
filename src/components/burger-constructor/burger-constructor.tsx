@@ -9,7 +9,6 @@ import { CustomScroll } from "react-custom-scroll";
 import Modal from "../modal/modal";
 import { useModal } from "../../hooks/useModal";
 import { useDrop } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
 import {
   addIngredient,
   resetConstructor,
@@ -22,19 +21,16 @@ import { useNavigate } from "react-router-dom";
 import { IIngredient, IIngredientWithKey } from "../../types/ingredient";
 import { DropCollectedProps } from "../../types/dnd";
 import { RootState } from "../../services/rootReducer";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 
 const BurgerConstructor: FC = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const burgerConstructor = useSelector(
-    (state: any) => state.burgerConstructor,
-  );
-  const ingredients = useSelector(
-    (state: any) => state.ingredients.ingredients,
-  );
-  const { userInfo } = useSelector((state: RootState) => state.user);
+  const burgerConstructor = useAppSelector((state) => state.burgerConstructor);
+  const ingredients = useAppSelector((state) => state.ingredients.ingredients);
+  const { userInfo } = useAppSelector((state) => state.user);
   const orderPrice = useMemo(() => {
     const ingredientsTotal = burgerConstructor.constructorIngredients.reduce(
       (acc: number, ingredient: IIngredient) => {
@@ -72,7 +68,9 @@ const BurgerConstructor: FC = () => {
     openModal();
   };
 
-  const orderName = useSelector((state: RootState) => state.orderReducer.name);
+  const orderName = useAppSelector(
+    (state: RootState) => state.orderReducer.name,
+  );
 
   const modal = (
     <Modal header={orderName} onClose={closeModal}>

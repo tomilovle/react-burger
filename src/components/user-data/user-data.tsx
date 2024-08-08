@@ -1,16 +1,16 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./user-data.module.css";
 import { sendUserData } from "../../services/userSlice";
-// import { RootState } from "../../services/rootReducer";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
+import { RootState } from "../../services/rootReducer";
 
 export const UserData: FC = () => {
-  const { token, userInfo } = useSelector((state: any) => state.user);
-  const dispatch = useDispatch();
+  const { token, userInfo } = useAppSelector((state: RootState) => state.user);
+  const dispatch = useAppDispatch();
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -28,12 +28,14 @@ export const UserData: FC = () => {
   const onNameChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setName(value);
-    value === userInfo.name ? setIsDataChanged(false) : setIsDataChanged(true);
+    value === userInfo?.name ? setIsDataChanged(false) : setIsDataChanged(true);
   };
   const onEmailChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
     setEmail(value);
-    value === userInfo.email ? setIsDataChanged(false) : setIsDataChanged(true);
+    value === userInfo?.email
+      ? setIsDataChanged(false)
+      : setIsDataChanged(true);
   };
   const onPasswordChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value;
@@ -49,8 +51,10 @@ export const UserData: FC = () => {
   };
 
   const onCancelEditing = () => {
-    setName(userInfo.name);
-    setEmail(userInfo.email);
+    if (userInfo) {
+      setName(userInfo.name);
+      setEmail(userInfo.email);
+    }
     setPassword("");
     setIsDataChanged(false);
   };

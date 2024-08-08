@@ -1,10 +1,10 @@
 import reducer, {
+  initialState,
   addIngredient,
   deleteIngredient,
   moveIngredient,
   resetConstructor,
 } from "./burgerConstructorSlice";
-import { BurgerConstructor } from "../types/burger";
 
 const MOCK_INGREDIENTS = [
   {
@@ -64,11 +64,6 @@ const MOCK_INGREDIENTS = [
     __v: 0,
   },
 ];
-
-const initialState: BurgerConstructor = {
-  bun: null,
-  constructorIngredients: [],
-};
 
 describe("burgerConstructorSlice", () => {
   it("should return the initial state", () => {

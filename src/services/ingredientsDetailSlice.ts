@@ -4,7 +4,7 @@ import { IIngredient } from "../types/ingredient";
 interface IngredientsDetailState {
   currentIngredient: IIngredient | null;
 }
-const initialState: IngredientsDetailState = {
+export const initialState: IngredientsDetailState = {
   currentIngredient: null,
 };
 const ingredientsDetailSlice = createSlice({

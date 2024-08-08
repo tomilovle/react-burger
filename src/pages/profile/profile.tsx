@@ -1,14 +1,14 @@
 import styles from "./profile.module.css";
 import { NavLink, Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { Layout } from "../../components/layout/layout";
 import { UserData } from "../../components/user-data/user-data";
 import { logout } from "../../services/userSlice";
 import { FC } from "react";
 import OrdersList from "../orders-list/orders-list";
+import { useAppDispatch } from "../../hooks/hook";
 
 const Profile: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleLogout = () => {
     const refreshToken = localStorage.getItem("refreshToken");

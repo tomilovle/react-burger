@@ -7,17 +7,17 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "../../components/layout/layout";
-import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../services/userSlice";
 import { RootState } from "../../services/rootReducer";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { userInfo } = useSelector((state: RootState) => state.user);
+  const { userInfo } = useAppSelector((state: RootState) => state.user);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 

@@ -6,14 +6,14 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link, useNavigate } from "react-router-dom";
 import { Layout } from "../../components/layout/layout";
-import { useDispatch } from "react-redux";
 import { forgotPassword } from "../../services/userSlice";
+import { useAppDispatch } from "../../hooks/hook";
 
 export const ForgotPassword: FC = () => {
   const [email, setEmail] = useState<string>("");
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const sendData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

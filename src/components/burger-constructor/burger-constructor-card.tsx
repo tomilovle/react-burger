@@ -1,5 +1,4 @@
 import React, { useRef, FC } from "react";
-import { useDispatch } from "react-redux";
 import {
   useDrag,
   useDrop,
@@ -21,6 +20,7 @@ import {
   DraggedItem,
   DropCollectedProps,
 } from "../../types/dnd";
+import { useAppDispatch } from "../../hooks/hook";
 
 interface IBurgerCardProps {
   ingredient: IIngredientWithKey;
@@ -28,7 +28,7 @@ interface IBurgerCardProps {
 }
 
 const BurgerCard: FC<IBurgerCardProps> = ({ ingredient, currentIndex }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const ingredientRef = useRef<HTMLDivElement | null>(null);
 
   const handleDeleteIngredient = (ingredient: IIngredientWithKey) => {
