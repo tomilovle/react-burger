@@ -50,7 +50,7 @@ interface LoginResponse {
   user: UserInfo;
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
   forgotPasswordRequest: false,
   forgotPasswordFailed: false,
   isForgotPassword: false,

@@ -21,7 +21,7 @@ interface IWsOrdersState {
   totalToday: number | undefined;
 }
 
-const initialState: IWsOrdersState = {
+export const initialState: IWsOrdersState = {
   orders: undefined,
   total: undefined,
   totalToday: undefined,

@@ -60,10 +60,10 @@ const IngredientDetails: FC = () => {
         src={localCurrentIngredient.image_large}
         alt={localCurrentIngredient.name}
       />
-      <p className="text text_type_main-medium mt-4">
+      <p className="text text_type_main-medium mt-4" data-cy="ingredient-name">
         {localCurrentIngredient.name}
       </p>
-      <div className={styles.desc}>
+      <div className={styles.desc} data-cy="ingredient-description">
         <div className={styles.item}>
           <span className="text text_type_main-default pt-8">Калории,ккал</span>
           <span className="text text_type_digits-default">

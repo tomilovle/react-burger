@@ -19,7 +19,7 @@ const OrderDetails: FC = () => {
   }
 
   return (
-    <div className={styles.modal}>
+    <div className={styles.modal} data-cy="order-modal">
       <p className="text text_type_digits-large pt-20">
         {" "}
         {number !== null ? number : "No Order Number"}

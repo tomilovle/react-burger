@@ -77,6 +77,7 @@ const BurgerCard: FC<IBurgerCardProps> = ({ ingredient, currentIndex }) => {
       key={ingredient._id}
       ref={ingredientRef}
       draggable="true"
+      data-cy="constructor-item"
     >
       <span className="pr-2">
         <DragIcon type="primary" />

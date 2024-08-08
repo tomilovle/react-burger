@@ -26,11 +26,11 @@ const Profile: FC = () => {
               <li className={styles.list_item}>
                 <NavLink
                   className={({ isActive }) =>
-                    isActive
+                    isActive || window.location.pathname === "/profile"
                       ? `${styles.link_active} text text_type_main-medium`
                       : `${styles.link} text text_type_main-medium`
                   }
-                  to=""
+                  to="user"
                 >
                   Профиль
                 </NavLink>
@@ -70,6 +70,7 @@ const Profile: FC = () => {
         </div>
         <div className={styles["col-8"]}>
           <Routes>
+            <Route path="user" element={<UserData />} />
             <Route index element={<UserData />} />
             <Route path="orders" element={<OrdersList />} />
           </Routes>

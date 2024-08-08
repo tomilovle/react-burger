@@ -65,15 +65,11 @@ const BurgerConstructor: FC = () => {
   });
 
   const handleOrder = () => {
-    if (userInfo) {
-      // @ts-ignore
-      dispatch(createOrder(burgerConstructor)).then(() => {
-        dispatch(resetConstructor());
-      });
-      openModal();
-    } else {
-      navigate("/login");
-    }
+    // @ts-ignore
+    dispatch(createOrder(burgerConstructor)).then(() => {
+      dispatch(resetConstructor());
+    });
+    openModal();
   };
 
   const orderName = useSelector((state: RootState) => state.orderReducer.name);
@@ -85,17 +81,24 @@ const BurgerConstructor: FC = () => {
   );
 
   return (
-    <section className="middle-container" ref={drop}>
+    <section
+      className="middle-container"
+      ref={drop}
+      data-cy="constructor-drop-area"
+    >
       <div className="pl-8 pt-8 pb-4">
         {burgerConstructor.bun && (
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={burgerConstructor.bun.name + "(верх)"}
-            price={burgerConstructor.bun.price}
-            thumbnail={burgerConstructor.bun.image}
-            key={burgerConstructor.bun._id}
-          />
+          <div data-cy="constructor-item">
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={burgerConstructor.bun.name + "(верх)"}
+              price={burgerConstructor.bun.price}
+              thumbnail={burgerConstructor.bun.image}
+              key={burgerConstructor.bun._id}
+              extraClass="cy-constructor-item"
+            />
+          </div>
         )}
         {!burgerConstructor.bun && (
           <p
@@ -120,14 +123,17 @@ const BurgerConstructor: FC = () => {
       </CustomScroll>
       <div className="pl-8 pt-4">
         {burgerConstructor.bun && (
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={burgerConstructor.bun.name + "(низ)"}
-            price={burgerConstructor.bun.price}
-            thumbnail={burgerConstructor.bun.image}
-            key={burgerConstructor.bun._id}
-          />
+          <div data-cy="constructor-item">
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={burgerConstructor.bun.name + "(низ)"}
+              price={burgerConstructor.bun.price}
+              thumbnail={burgerConstructor.bun.image}
+              key={burgerConstructor.bun._id}
+              extraClass="cy-constructor-item"
+            />
+          </div>
         )}
       </div>
 
