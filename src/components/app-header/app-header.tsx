@@ -23,12 +23,17 @@ const AppHeader: FC = () => {
           <BurgerIcon type="primary" />
           <p className="text text_type_main-default pl-2">Конструктор</p>
         </NavLink>
-        <div className={`${styles.item} text_color_inactive`}>
+        <NavLink
+          to="/feed"
+          className={({ isActive }) =>
+            isActive
+              ? `${styles.item} ${styles.text_color_active}`
+              : `${styles.item} text_color_inactive`
+          }
+        >
           <ListIcon type="secondary" />
-          <p className="text text_type_main-default text_color_inactive pl-2">
-            Лента заказов
-          </p>
-        </div>
+          <p className="text text_type_main-default pl-2">Лента заказов</p>
+        </NavLink>
       </div>
       <NavLink to="/" className={styles.logo}>
         <Logo />

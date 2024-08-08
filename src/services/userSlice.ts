@@ -1,8 +1,56 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../axiosInstance";
 import { TOKEN_EXPIRED, UNAUTHORIZED } from "../constants";
+import { RootState } from "./store";
 
-const initialState = {
+interface UserState {
+  forgotPasswordRequest: boolean;
+  forgotPasswordFailed: boolean;
+  isForgotPassword: boolean;
+
+  resetPasswordRequest: boolean;
+  resetPasswordFailed: boolean;
+
+  registrationRequest: boolean;
+  registrationFailed: boolean;
+
+  token: string;
+
+  loginRequest: boolean;
+  loginFailed: boolean;
+
+  sendUserInfoRequest: boolean;
+  sendUserInfoFailed: boolean;
+
+  userInfo: UserInfo | null;
+
+  logoutRequest: boolean;
+  logoutFailed: boolean;
+
+  getUserInfoRequest: boolean;
+  getUserInfoFailed: boolean;
+
+  refreshTokenRequest: boolean;
+  refreshTokenFailed: boolean;
+}
+
+interface UserInfo {
+  email: string;
+  name: string;
+}
+
+interface RegistrationResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: UserInfo;
+}
+
+const initialState: UserState = {
   forgotPasswordRequest: false,
   forgotPasswordFailed: false,
   isForgotPassword: false,
@@ -13,7 +61,7 @@ const initialState = {
   registrationRequest: false,
   registrationFailed: false,
 
-  token: null,
+  token: localStorage.getItem("accessToken") || "",
 
   loginRequest: false,
   loginFailed: false,
@@ -33,7 +81,7 @@ const initialState = {
   refreshTokenFailed: false,
 };
 
-export const forgotPassword = createAsyncThunk(
+export const forgotPassword = createAsyncThunk<void, string>(
   "user/forgotPassword",
   async (email, { dispatch }) => {
     try {
@@ -46,58 +94,66 @@ export const forgotPassword = createAsyncThunk(
   },
 );
 
-export const resetPassword = createAsyncThunk(
-  "user/resetPassword",
-  async ({ password, token }, { dispatch }) => {
-    try {
-      await axiosInstance.post("/password-reset/reset", { password, token });
-      dispatch(setResetPasswordSuccess());
-      dispatch(setForgotPasswordState(false));
-    } catch (error) {
-      dispatch(setResetPasswordFailed());
-    }
-  },
-);
+export const resetPassword = createAsyncThunk<
+  void,
+  { password: string; token: string }
+>("user/resetPassword", async ({ password, token }, { dispatch }) => {
+  try {
+    await axiosInstance.post("/password-reset/reset", { password, token });
+    dispatch(setResetPasswordSuccess());
+    dispatch(setForgotPasswordState(false));
+  } catch (error) {
+    dispatch(setResetPasswordFailed());
+  }
+});
 
-export const registration = createAsyncThunk(
-  "user/registration",
-  async ({ email, name, password }, { dispatch }) => {
-    try {
-      const response = await axiosInstance.post("/auth/register", {
+export const registration = createAsyncThunk<
+  void,
+  { email: string; name: string; password: string }
+>("user/registration", async ({ email, name, password }, { dispatch }) => {
+  try {
+    const response = await axiosInstance.post<RegistrationResponse>(
+      "/auth/register",
+      {
         email,
         name,
         password,
-      });
-      dispatch(registrationUserSuccess(response.data.accessToken));
-      localStorage.setItem("refreshToken", response.data.refreshToken);
-    } catch (error) {
-      dispatch(registrationUserFailed());
-    }
-  },
-);
+      },
+    );
+    dispatch(registrationUserSuccess(response.data.accessToken));
+    localStorage.setItem("accessToken", response.data.accessToken);
+    localStorage.setItem("refreshToken", response.data.refreshToken);
+  } catch (error) {
+    dispatch(registrationUserFailed());
+  }
+});
 
-export const login = createAsyncThunk(
-  "user/login",
-  async ({ email, password }, { dispatch }) => {
-    try {
-      const response = await axiosInstance.post("/auth/login", {
-        email,
-        password,
-      });
-      dispatch(setLoginSuccess(response.data));
-      localStorage.setItem("refreshToken", response.data.refreshToken);
-    } catch (error) {
-      dispatch(setLoginFailed());
-      console.log(error);
-    }
-  },
-);
+export const login = createAsyncThunk<
+  void,
+  { email: string; password: string }
+>("user/login", async ({ email, password }, { dispatch }) => {
+  try {
+    const response = await axiosInstance.post<LoginResponse>("/auth/login", {
+      email,
+      password,
+    });
+    dispatch(setLoginSuccess(response.data));
+    localStorage.setItem("accessToken", response.data.accessToken);
+    localStorage.setItem("refreshToken", response.data.refreshToken);
+  } catch (error) {
+    dispatch(setLoginFailed());
+    console.log(error);
+  }
+});
 
-export const sendUserData = createAsyncThunk(
+export const sendUserData = createAsyncThunk<
+  void,
+  { token: string; name: string; email: string; password: string }
+>(
   "user/sendUserData",
   async ({ token, name, email, password }, { dispatch }) => {
     try {
-      const response = await axiosInstance.patch(
+      const response = await axiosInstance.patch<{ user: UserInfo }>(
         "/auth/user",
         { name, email, password },
         {
@@ -106,20 +162,22 @@ export const sendUserData = createAsyncThunk(
       );
       dispatch(sendUserInfoSuccess(response.data.user));
     } catch (error) {
-      if (error.response.status === TOKEN_EXPIRED) {
-        dispatch(refreshToken(localStorage.getItem("refreshToken")));
+      const axiosError = error as any;
+      if (axiosError.response?.status === TOKEN_EXPIRED) {
+        dispatch(refreshToken(localStorage.getItem("refreshToken") as string));
       }
       dispatch(sendUserInfoFailed());
     }
   },
 );
 
-export const logout = createAsyncThunk(
+export const logout = createAsyncThunk<void, string>(
   "user/logout",
   async (refreshToken, { dispatch }) => {
     try {
       await axiosInstance.post("/auth/logout", { token: refreshToken });
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("accessToken");
       dispatch(setLogoutSuccess());
     } catch (error) {
       dispatch(setLogoutFailed());
@@ -127,31 +185,38 @@ export const logout = createAsyncThunk(
   },
 );
 
-export const getUserData = createAsyncThunk(
+export const getUserData = createAsyncThunk<void, string>(
   "user/getUserData",
   async (token, { dispatch }) => {
     try {
-      const response = await axiosInstance.get("/auth/user", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.get<{ user: UserInfo }>(
+        "/auth/user",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       dispatch(setGetUserInfoSuccess(response.data.user));
     } catch (error) {
+      const axiosError = error as any;
       if (
-        error.response.status === TOKEN_EXPIRED ||
-        error.response.status === UNAUTHORIZED
+        axiosError.response?.status === TOKEN_EXPIRED ||
+        axiosError.response?.status === UNAUTHORIZED
       ) {
-        dispatch(refreshToken(localStorage.getItem("refreshToken")));
+        dispatch(refreshToken(localStorage.getItem("refreshToken") as string));
       }
       dispatch(setGetUserInfoFailed());
     }
   },
 );
 
-export const refreshToken = createAsyncThunk(
+export const refreshToken = createAsyncThunk<void, string>(
   "user/refreshToken",
   async (refreshToken, { dispatch }) => {
     try {
-      const response = await axiosInstance.post("/auth/token", {
+      const response = await axiosInstance.post<{
+        accessToken: string;
+        refreshToken: string;
+      }>("/auth/token", {
         token: refreshToken,
       });
       localStorage.setItem("refreshToken", response.data.refreshToken);
@@ -166,7 +231,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setForgotPasswordState(state, action) {
+    setForgotPasswordState(state, action: PayloadAction<boolean>) {
       state.isForgotPassword = action.payload;
     },
     setForgotPassword(state) {
@@ -195,7 +260,7 @@ const userSlice = createSlice({
       state.registrationRequest = true;
       state.registrationFailed = false;
     },
-    registrationUserSuccess(state, action) {
+    registrationUserSuccess(state, action: PayloadAction<string>) {
       state.registrationRequest = false;
       state.token = action.payload;
     },
@@ -207,7 +272,7 @@ const userSlice = createSlice({
       state.loginRequest = true;
       state.loginFailed = false;
     },
-    setLoginSuccess(state, action) {
+    setLoginSuccess(state, action: PayloadAction<LoginResponse>) {
       state.loginRequest = false;
       state.token = action.payload.accessToken;
       state.userInfo = action.payload.user;
@@ -220,7 +285,7 @@ const userSlice = createSlice({
       state.sendUserInfoRequest = true;
       state.sendUserInfoFailed = false;
     },
-    sendUserInfoSuccess(state, action) {
+    sendUserInfoSuccess(state, action: PayloadAction<UserInfo>) {
       state.sendUserInfoRequest = false;
       state.userInfo = action.payload;
     },
@@ -234,7 +299,7 @@ const userSlice = createSlice({
     },
     setLogoutSuccess(state) {
       state.logoutRequest = false;
-      state.token = null;
+      state.token = "";
       state.userInfo = null;
     },
     setLogoutFailed(state) {
@@ -245,7 +310,7 @@ const userSlice = createSlice({
       state.getUserInfoRequest = true;
       state.getUserInfoFailed = false;
     },
-    setGetUserInfoSuccess(state, action) {
+    setGetUserInfoSuccess(state, action: PayloadAction<UserInfo>) {
       state.getUserInfoRequest = false;
       state.userInfo = action.payload;
     },
@@ -257,7 +322,7 @@ const userSlice = createSlice({
       state.refreshTokenRequest = true;
       state.refreshTokenFailed = false;
     },
-    setRefreshTokenSuccess(state, action) {
+    setRefreshTokenSuccess(state, action: PayloadAction<string>) {
       state.refreshTokenRequest = false;
       state.token = action.payload;
     },
@@ -267,6 +332,14 @@ const userSlice = createSlice({
     },
   },
 });
+
+export const selectIsForgotPassword = (state: RootState) => {
+  return state.user.isForgotPassword;
+};
+
+export const selectAccessToken = (state: RootState) => {
+  return state.user.token;
+};
 
 export const {
   setForgotPasswordState,

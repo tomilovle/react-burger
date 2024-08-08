@@ -7,6 +7,10 @@
     width: 33%;
     padding: 0 20px;
 }
+.col-8 {
+    width: 66%;
+    padding: 0 20px;
+}
 .navigation {
     margin-right: 60px;
 }

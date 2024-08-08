@@ -24,6 +24,7 @@ const IngredientDetails: FC = () => {
 
   useEffect(() => {
     if (!ingredients.length) {
+      // @ts-ignore
       dispatch(fetchIngredients());
     }
   }, [dispatch, ingredients.length]);
