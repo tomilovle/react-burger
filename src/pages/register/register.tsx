@@ -8,15 +8,15 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import { Layout } from "../../components/layout/layout";
-import { useDispatch } from "react-redux";
 import { registration } from "../../services/userSlice";
+import { useAppDispatch } from "../../hooks/hook";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onChangePass = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);

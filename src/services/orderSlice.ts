@@ -17,7 +17,7 @@ interface OrderResponse {
   };
 }
 
-const initialState: OrderState = {
+export const initialState: OrderState = {
   order: null,
   number: 0,
   name: "",

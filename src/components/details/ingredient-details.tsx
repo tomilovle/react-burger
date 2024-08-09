@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from "./details.module.css";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   setCurrentIngredient,
@@ -9,14 +8,15 @@ import {
 import { fetchIngredients } from "../../services/ingredientsSlice";
 import { IIngredient } from "../../types/ingredient";
 import { RootState } from "../../services/rootReducer";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 
 const IngredientDetails: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { id } = useParams();
-  const ingredients = useSelector(
+  const ingredients = useAppSelector(
     (state: RootState) => state.ingredients.ingredients,
   );
-  const currentIngredient = useSelector(
+  const currentIngredient = useAppSelector(
     (state: RootState) => state.ingredientsDetail.currentIngredient,
   );
   const [localCurrentIngredient, setLocalCurrentIngredient] =
@@ -60,10 +60,10 @@ const IngredientDetails: FC = () => {
         src={localCurrentIngredient.image_large}
         alt={localCurrentIngredient.name}
       />
-      <p className="text text_type_main-medium mt-4">
+      <p className="text text_type_main-medium mt-4" data-cy="ingredient-name">
         {localCurrentIngredient.name}
       </p>
-      <div className={styles.desc}>
+      <div className={styles.desc} data-cy="ingredient-description">
         <div className={styles.item}>
           <span className="text text_type_main-default pt-8">Калории,ккал</span>
           <span className="text text_type_digits-default">

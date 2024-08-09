@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IIngredientWithKey } from "../types/ingredient";
 import { BurgerConstructor } from "../types/burger";
 
-const initialState: BurgerConstructor = {
+export const initialState: BurgerConstructor = {
   bun: null,
   constructorIngredients: [],
 };

@@ -23,6 +23,7 @@ const IngredientCard: FC<IIngredientCardProps> = ({ ingredient }) => {
         state={{ background: location }}
         className={styles.card}
         ref={dragRef}
+        data-cy="ingredient-item"
       >
         <img
           className={styles.image}

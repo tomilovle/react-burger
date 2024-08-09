@@ -14,9 +14,13 @@ interface IModalProps {
 const Modal: FC<IModalProps> = ({ children, header, onClose }) => {
   return ReactDOM.createPortal(
     <>
-      <div className={styles.modal}>
+      <div className={styles.modal} data-cy="ingredient-modal">
         <div className="text text_type_main-large">{header}</div>
-        <div className={styles.close} onClick={onClose}>
+        <div
+          className={styles.close}
+          onClick={onClose}
+          data-cy="order-modal-close"
+        >
           <CloseIcon type="primary" />
         </div>
         {children}

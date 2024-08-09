@@ -3,21 +3,18 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientCard from "./burger-ingredients-card";
 import styles from "./burger-ingredients.module.css";
 import { CustomScroll } from "react-custom-scroll";
-import { useDispatch, useSelector } from "react-redux";
 import { fetchIngredients } from "../../services/ingredientsSlice";
 import { FC } from "react";
 import { IIngredient } from "../../types/ingredient";
-import { RootState } from "../../services/rootReducer";
+import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 
 const BurgerIngredients: FC = () => {
   const [current, setCurrent] = useState<string>("bun");
 
-  const dispatch = useDispatch();
-  const ingredients = useSelector(
-    (state: RootState) => state.ingredients.ingredients,
-  );
-  const status = useSelector((state: RootState) => state.ingredients.status);
-  const error = useSelector((state: RootState) => state.ingredients.error);
+  const dispatch = useAppDispatch();
+  const ingredients = useAppSelector((state) => state.ingredients.ingredients);
+  const status = useAppSelector((state) => state.ingredients.status);
+  const error = useAppSelector((state) => state.ingredients.error);
 
   const tabRef = useRef<HTMLDivElement | null>(null);
   const bunRef = useRef<HTMLDivElement | null>(null);

@@ -1,14 +1,18 @@
 import React, { FC } from "react";
-import { useSelector } from "react-redux";
 
 import styles from "./details.module.css";
 import done from "../../images/done.png";
 import { RootState } from "../../services/rootReducer";
+import { useAppSelector } from "../../hooks/hook";
 
 const OrderDetails: FC = () => {
-  const number = useSelector((state: RootState) => state.orderReducer.number);
-  const status = useSelector((state: RootState) => state.orderReducer.status);
-  const error = useSelector((state: RootState) => state.orderReducer.error);
+  const number = useAppSelector(
+    (state: RootState) => state.orderReducer.number,
+  );
+  const status = useAppSelector(
+    (state: RootState) => state.orderReducer.status,
+  );
+  const error = useAppSelector((state: RootState) => state.orderReducer.error);
 
   if (status === "loading") {
     return <p className="text text_type_main-medium">Loading...</p>;
@@ -19,7 +23,7 @@ const OrderDetails: FC = () => {
   }
 
   return (
-    <div className={styles.modal}>
+    <div className={styles.modal} data-cy="order-modal">
       <p className="text text_type_digits-large pt-20">
         {" "}
         {number !== null ? number : "No Order Number"}
